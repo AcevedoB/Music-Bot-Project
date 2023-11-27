@@ -1,7 +1,7 @@
 # Imports
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 import requests
 import pandas as pd
 import json
@@ -52,7 +52,6 @@ def get_track_info(song_name, artist_name):
 
   # Access the 'data' key, which likely contains a list of tracks
   tracks = data.get('data', [])
-
   return tracks
 
 
@@ -66,8 +65,14 @@ async def lookup_song(ctx, *, query):
         song_name, artist_name = map(str.strip, query.split(" by "))
       
     except ValueError:
+      
         # Accounts for errors that might occur
-        await ctx.send("Please provide the song name and artist using 'by' as a separator, like `!lookup_song Song Name by Artist`.")
+        embed = discord.Embed(
+
+          title = "Error Message",
+          description = "Please provide the song name and artist using 'by' as a separator, like `!lookup_song 'Song Name' by 'Artist'.",
+          color = 0xfc0303)
+        await ctx.send(embed = embed)
       
         return
 
@@ -106,8 +111,15 @@ async def lookup_song(ctx, *, query):
         await ctx.send(embed=embed)
 
     else:
+      
         # Sends a message if the track is not located
-        await ctx.send(f"No tracks found for '{song_name}' by '{artist_name}'.")
+        embed = discord.Embed(
+
+          title = "Error Message",
+          description = f"No tracks found for '{song_name}' by '{artist_name}'.",
+          color = 0xfc0303)
+      
+        await ctx.send(embed = embed)
 
 
 # Command to look up a track by name
@@ -153,8 +165,15 @@ async def search_songs(ctx, *, track_name):
     await ctx.send(embed=embed)
     
   else:
+    
       # Sends a message if the track is not located
-      await ctx.send('No tracks found.')
+      embed = discord.Embed(
+
+        title = "Error Message",
+        description = "No tracks found.",
+        color = 0xfc0303)
+    
+      await ctx.send(embed = embed)
 
   
 # Command to look up an album by name
@@ -195,7 +214,13 @@ async def search_albums(ctx, *, album_name):
     
   else:
       # Sends a message if the track is not located
-      await ctx.send('No tracks found.')
+      embed = discord.Embed(
+
+        title = "Error Message",
+        description = "No albums found.",
+        color = 0xfc0303)
+    
+      await ctx.send(embed=embed)
 
 
 @bot.command()
@@ -209,8 +234,13 @@ async def lookup_album(ctx, *, query):
     except ValueError:
       
         # Accounts for errors that might occur
-        await ctx.send("Please provide the album name and artist using 'by' as a separator, like `!lookup_album 'Album Name' by 'Artist'.")
+        embed = discord.Embed(
 
+          title = "Error Message",
+          description = "Please provide the album name and artist using 'by' as a separator, like `!lookup_album 'Album Name' by 'Artist'.",
+          color = 0xfc0303)
+
+        await ctx.send(embed=embed)
         return
 
     # Gets the track information based on the user input
@@ -230,12 +260,10 @@ async def lookup_album(ctx, *, query):
       tracklist_data = response.json()
 
       # Takes out the track names
-      album_tracks = [f"[{track.get('title')}]({track.get('preview')})\n" 
-for track in tracklist_data.get('data', [])]
+      album_tracks = [f"{track.get('title')}\n" for track in tracklist_data.get('data', [])]
 
       # Gets the artists name
-      artist_info = track_info[0].get('artist')
-      artist_name = artist_info.get('name')
+      artist_name = track_info[0].get('artist').get('name')
 
       # Gets the album info
       album_name = track_info[0].get('album').get('title')
@@ -258,8 +286,15 @@ for track in tracklist_data.get('data', [])]
       await ctx.send(embed=embed)
 
     else:
+      
         # Sends a message if the track is not located
-        await ctx.send(f"No tracks found for '{album_name}' by '{artist_name}'.")
+        embed = discord.Embed(
+
+          title = "Error Message",
+          description = f"No albums found for '{album_name}' by '{artist_name}'.",
+          color = 0xfc0303)
+      
+        await ctx.send(embed = embed)
 
 
 # Event when the bot is ready
