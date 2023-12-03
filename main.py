@@ -1,5 +1,8 @@
 # Imports
 import discord
+from typing import Dict
+from discord.ui import View, Select
+from discord import SelectOption
 from discord.ext import commands
 import requests
 
@@ -8,6 +11,8 @@ import requests
 intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+TOKEN = 'MTE3NDg1NjM2NDM0NzExMzQ5Mg.GVkGWD.oQDZoQFfJhd5bsTfdQJb9Q7PLXK3Z-k6YwZ7IU'
 
 
 # Method that gets the tracks information
@@ -120,7 +125,7 @@ def find_info(category, id):
 @bot.command()
 async def lookupsong(ctx, *, query):
 
-  gif_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1179849757577986161/ezgif-2-c23f3ae718.gif?ex=657b47b6&is=6568d2b6&hm=5c3cbb70737fe51d18a0468ffd3703295f776bd5021ca9234a43d3e0725ba812&'
+  gif_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1179918892374708275/ezgif-2-77f96dc773.gif?ex=657b8819&is=65691319&hm=f8833fe80128065e04028a09fac1d0830bea58d7dbc4850b9a773bc2f7fafb0a&'
 
   try:
     # Splits the song name and the artist with a 'by'
@@ -292,12 +297,13 @@ async def searchalbums(ctx, *, album_name):
       artist_name = album.get('artist').get('name')
 
       # Fills the list with all the values found
-      fields.append((f"{album_name}", f"Artist: {artist_name}\nTracks: {number_of_tracks}\n{hyperlink}"))
+      fields.append((f"ˏˋ°•⁀➷ {album_name}", f"*ˏˋ°•⁀➷ Artist: {artist_name}\nˏˋ°•⁀➷ Tracks: {number_of_tracks}*\nˏˋ°•⁀➷ {hyperlink}\n\n•❅───✧❅✦❅✧───❅•"))
 
     # Embeds the information into a nice box
     embed = discord.Embed(
 
-      title = "Top 5 Album Results",
+      title = "˚₊· ͟͟͞͞➳❥ Top 5 Album Results",
+      description = '•❅───✧❅✦❅✧───❅•',
       color = 0xfa419d)
 
     for name, value in fields:
@@ -310,7 +316,7 @@ async def searchalbums(ctx, *, album_name):
       embed = discord.Embed(
 
         title = "˚₊· ͟͟͞͞➳❥ Error Message",
-        description = "No albums found.",
+        description = "•❅───✧❅✦❅✧───❅•\n\nNo albums found.\n\n•❅───✧❅✦❅✧───❅•",
         color = 0xfc0303)
     
       await ctx.send(embed = embed)
@@ -387,33 +393,106 @@ async def lookupalbum(ctx, *, query):
 
     else:
       
-        # Sends a message if the track is not located
-        embed = discord.Embed(
+      # Sends a message if the track is not located
+      embed = discord.Embed(
 
-          title = "˚₊· ͟͟͞͞➳❥ Error Message",
-          description = f"•❅───✧❅✦❅✧───❅•\n\nNo albums found for '{album_name}' by '{artist_name}'. Try checking your spelling.\n\n•❅───✧❅✦❅✧───❅•",
-          color = 0xfc0303)
+        title = "˚₊· ͟͟͞͞➳❥ Error Message",
+        description = f"•❅───✧❅✦❅✧───❅•\n\nNo albums found for '{album_name}' by '{artist_name}'. Try checking your spelling.\n\n•❅───✧❅✦❅✧───❅•",
+        color = 0xfc0303)
       
-        await ctx.send(embed = embed)
+      await ctx.send(embed = embed)
+
+
+# This class allows for the use of a drop down menu using the 
+# showcommands command.
+class MyView(discord.ui.View):
+
+  # Place to store the users answer
+  answer1 = None
+
+  # Gives all the options within the drop down
+  @discord.ui.select(
+    placeholder = "Pick One I Guess...",
+    
+    options = [
+      
+      discord.SelectOption(label = '!searchsongs', value = 'searchsongs'),
+      
+      discord.SelectOption(label = '!searchalbums', value = 'searchalbums'),
+      
+      discord.SelectOption(label = '!lookupsong', value = 'lookupsong'),
+      
+      discord.SelectOption(label = '!lookupalbum', value = 'lookupalbum')
+    ]
+  )
+
+  # Gives all the answers to the drop down menu
+  async def select_callback(self, interaction:discord.Interaction, select_item : discord.ui.Select):
+
+    # Urls to all the images we need
+    searchsongs_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1180704098413183058/2023-12-02-21-55-14_-_Trim.gif?ex=657e6361&is=656bee61&hm=21c0c1c640ba0f5ad3f6b2877b633ee41b191b6d40f001ef93a29bf4b77ffae9&'
+
+    searchalbums_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1180705540649787433/2023-12-02-22-00-54_-_Trim.gif?ex=657e64b9&is=656befb9&hm=0c6495640e4c2145aa05d1601cea762e8e571f211df9d2fbe211614289d2ecbc&'
+
+    lookupsong_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1180707026435838003/2023-12-02-22-04-02_-_Trim.gif?ex=657e661b&is=656bf11b&hm=6b2164495926a390821164611fc415e8bc3c2782fcb327b2bdc255ae9e49bd3b&'
+
+    lookupalbum_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1180707026435838003/2023-12-02-22-04-02_-_Trim.gif?ex=657e661b&is=656bf11b&hm=6b2164495926a390821164611fc415e8bc3c2782fcb327b2bdc255ae9e49bd3b&'
+
+    # Moves the users answer to in here so it can be utilized
+    self.answer1 = select_item.values[0] if select_item.values else None
+
+    # Displays a message depending on what the user inputs
+    if self.answer1 == 'searchsongs':
+        embed = discord.Embed(
+            title='°✮  🎀  ❢𝒮𝑒𝒶𝓇𝒸𝒽 𝓈♡𝓃𝑔𝓈  🎀  ✮',
+            color = 0xfa419d
+          
+        )
+        embed.set_image(url = searchsongs_url)
+      
+        await interaction.response.send_message(embed=embed)
+        self.stop()
+      
+    elif self.answer1 == 'searchalbums':
+        embed = discord.Embed(
+            title = r'🐸⋆🐓❀🎀  ❢𝒮𝑒𝒶𝓇𝒸𝒽 𝒶𝓁𝒷𝓊𝓂𝓈  🎀❀🐓 ⋆ 🐸',
+            color = 0xfa419d
+          
+        )
+        embed.set_image(url = searchalbums_url)
+      
+        await interaction.response.send_message(embed=embed)
+        self.stop()
+      
+    elif self.answer1 == 'lookupsong':
+        embed = discord.Embed(
+            title = '🐻 ✮ 🎀  ❣❀𝓁𝑜𝑜𝓀𝓊𝓅 𝓈𝑜𝓃𝑔  🎀 ✮ 🐻',
+            color = 0xfa419d
+          
+        )
+        embed.set_image(url = lookupsong_url)
+      
+        await interaction.response.send_message(embed=embed)
+        self.stop()
+      
+    elif self.answer1 == 'lookupalbum':
+        embed = discord.Embed(
+            title = '🐘 ⋆ 🐞 ✮ 🎀  ❢𝓁𝑜𝑜𝓀𝓊𝓅𝒶𝓁𝒷𝓊𝓂  🎀 ✮ 🐞 ⋆ 🐘',
+            color = 0xfa419d
+          
+        )
+        embed.set_image(url = lookupalbum_url)
+      
+        await interaction.response.send_message(embed = embed)
+        self.stop()
 
 
 # This command shows all the commands and what they do
 @bot.command()
 async def showcommands(ctx):
+  view = MyView()
+  await ctx.send("What don't you understand?", view=view)
 
-  gif_url = 'https://cdn.discordapp.com/attachments/1179823207335874680/1179823275979833375/sukuna-ryomen-sukuna.gif?ex=657b2f0d&is=6568ba0d&hm=c4ebfa3f350ff1020974ed8947c19f5de7e9f04f06f2a50bdd6466b284451caf&'
-  
-  embed = discord.Embed(
-
-    title = "Available Commands",
-    color = 0xfc05a6)
-
-  embed.set_image(
-    url = gif_url
-  )
-
-  await ctx.send(embed = embed)
-  
 
 # Event when the bot is ready
 @bot.event
@@ -421,4 +500,4 @@ async def on_ready():
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
 
 # Run the bot
-bot.run('MTE3NDg1NjM2NDM0NzExMzQ5Mg.GH5BNH.XR_QEvGuisiF56nVBbYNYEZPt4M6XjGjsRIBp8')
+bot.run(TOKEN)
