@@ -5,6 +5,7 @@ from discord.ui import View, Select
 from discord import SelectOption
 from discord.ext import commands
 import requests
+import os
 
 
 # Set up the bot with intents
@@ -12,7 +13,8 @@ intents = discord.Intents.all()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-TOKEN = 'MTE3NDg1NjM2NDM0NzExMzQ5Mg.GVkGWD.oQDZoQFfJhd5bsTfdQJb9Q7PLXK3Z-k6YwZ7IU'
+# Secures the token
+TOKEN = os.environ['TOKEN']
 
 
 # Method that gets the tracks information
@@ -137,7 +139,7 @@ async def lookupsong(ctx, *, query):
     embed = discord.Embed(
 
       title = "˚₊· ͟͟͞͞➳❥ Error Message",
-      description = "Please provide the song name and artist using 'by' as a separator, like `!lookup_song 'Song Name' by 'Artist'.",
+      description = "•❅───✧❅✦❅✧───❅•\n\nPlease provide the song name and artist using 'by' as a separator, like `!lookupsong 'Song Name' by 'Artist'.\n\n•❅───✧❅✦❅✧───❅•",
       color = 0xfc0303)
     await ctx.send(embed = embed)
       
@@ -199,7 +201,7 @@ async def lookupsong(ctx, *, query):
     embed = discord.Embed(
 
       title = "˚₊· ͟͟͞͞➳❥ Error Message",
-      description = f"No tracks found for '{song_name}' by '{artist_name}'. Make sure to check your spelling.",
+      description = f"•❅───✧❅✦❅✧───❅•\n\nNo tracks found for '{song_name}' by '{artist_name}'. Make sure to check your spelling.\n\n•❅───✧❅✦❅✧───❅•",
       color = 0xfc0303)
       
     await ctx.send(embed = embed)
@@ -254,7 +256,7 @@ async def searchsongs(ctx, *, track_name):
       embed = discord.Embed(
 
         title = "˚₊· ͟͟͞͞➳❥ Error Message",
-        description = "No tracks found.",
+        description = "•❅───✧❅✦❅✧───❅•\n\nNo tracks found.\n\n•❅───✧❅✦❅✧───❅•",
         color = 0xfc0303)
     
       await ctx.send(embed = embed)
@@ -336,7 +338,7 @@ async def lookupalbum(ctx, *, query):
         embed = discord.Embed(
 
           title = "˚₊· ͟͟͞͞➳❥ Error Message",
-          description = "•❅───✧❅✦❅✧───❅•\n\nPlease provide the album name and artist using 'by' as a separator, like `!lookup_album 'Album Name' by 'Artist'.\n\n•❅───✧❅✦❅✧───❅•",
+          description = "•❅───✧❅✦❅✧───❅•\n\nPlease provide the album name and artist using 'by' as a separator, like `!lookupalbum 'Album Name' by 'Artist'.\n\n•❅───✧❅✦❅✧───❅•",
           color = 0xfc0303)
 
         await ctx.send(embed=embed)
